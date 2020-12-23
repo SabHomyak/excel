@@ -9,7 +9,7 @@ const Dashboard = (props) => {
             <HeaderContainer/>
             <div className={classes.new}>
                <div className={classes.view}>
-                   <a href="#" className={classes.create}>
+                   <a href="/#" className={classes.create}>
                        Новая Таблица
                    </a>
                </div>

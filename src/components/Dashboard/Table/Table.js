@@ -11,15 +11,15 @@ const Table = (props) => {
             </div>
             <ul className={classes.list}>
                 <li className={classes.record}>
-                    <a href="#">Таблица номер 1</a>
+                    <a href="/#">Таблица номер 1</a>
                     <strong>12.06.2020</strong>
                 </li>
                 <li className={classes.record}>
-                    <a href="#">Таблица номер 1</a>
+                    <a href="/#">Таблица номер 1</a>
                     <strong>12.06.2022</strong>
                 </li>
                 <li className={classes.record}>
-                    <a href="#">Таблица номер 1</a>
+                    <a href="/#">Таблица номер 1</a>
                     <strong>12.06.2021</strong>
                 </li>
             </ul>
