@@ -6,7 +6,7 @@ import RowsContainer from "./Rows/RowsContainer";
 const Table = () => {
     return (
         <div className={classes.table}>
-            <RowsContainer size={5}/>
+            <RowsContainer/>
         </div>
     )
 }

@@ -1,9 +1,15 @@
 import Excel from "./Excel";
 import React from "react";
 import {connect} from "react-redux";
-import {setColState, setRowState} from "../redux/tableReducer";
+import {setActiveCell, setColState, setRowState} from "../redux/tableReducer";
 
 const ExcelContainer = (props) => {
     return <Excel {...props}/>
 }
-export default connect(null, {setColState,setRowState})(ExcelContainer)
+const mapStateToProps = state => {
+    return {
+        sizeRows: state.sizeRows,
+        sizeCols: state.sizeCols
+    }
+}
+export default connect(mapStateToProps, {setColState, setRowState, setActiveCell})(ExcelContainer)

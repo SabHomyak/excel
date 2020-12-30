@@ -28,7 +28,8 @@ const RowsContainer = (props) => {
 const mapStateToProps = (state) => {
     return {
         dataState: state.dataState,
-        rowState: state.rowState
+        rowState: state.rowState,
+        sizeRow: state.sizeRows
     }
 }
 export default connect(mapStateToProps)(RowsContainer)

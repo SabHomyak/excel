@@ -4,7 +4,6 @@ import CellContainer from "./Cell/CellContainer";
 
 
 const Row = props => {
-    console.log('render row')
     const index = props.index
     const resizer = index
         ? <div
@@ -32,11 +31,11 @@ const Row = props => {
         </div>
     )
 }
-const generateCols = ({index, colState, dataState}) => {
+const generateCols = ({index, colState, dataState,sizeCols}) => {
     const positionAinChar = 'A'.charCodeAt()
-    const positionZinChar = 'Z'.charCodeAt()
-    const sizeAZ = positionZinChar - positionAinChar
-    const cols = Array(sizeAZ + 1).fill('')
+    // const positionZinChar = 'Z'.charCodeAt()
+    // const sizeAZ = positionZinChar - positionAinChar
+    const cols = Array(sizeCols).fill('')
     if (index === 0) {
         //generate first-row ABC...
         return cols.map((col, i) => {
@@ -57,9 +56,10 @@ const generateCols = ({index, colState, dataState}) => {
         )
     } else {
         return cols.map((col, i) => {
+                const position = `${index}:${i}`
                 return <CellContainer
                     key={i}
-                    position={`${index}:${i}`}
+                    position={position}
                     index={index}
                     width={colState[i] ? colState[i] : null}
                     data={dataState[`${index}:${i}`]}

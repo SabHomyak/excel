@@ -2,7 +2,7 @@ import React from "react";
 import classes from './formula.module.scss'
 
 
-const Formula = (props) =>{
+const Formula = (props) => {
     return (
         <div className={classes.formula}>
             <div className={classes.info}>fx</div>
@@ -11,7 +11,11 @@ const Formula = (props) =>{
                 contentEditable={true}
                 spellCheck={false}
                 suppressContentEditableWarning={true}
-            >{props.formula}</div>
+                dangerouslySetInnerHTML={{__html:props.formula}}
+                onInput={event => {
+                    props.setDataState(props.activeCell,event.currentTarget.innerHTML)
+                }}
+            />
         </div>
     )
 }

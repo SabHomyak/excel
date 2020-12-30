@@ -6,13 +6,10 @@ import FormulaContainer from "./Formula/FormulaContainer";
 import TableContainer from "./Table/TableContainer";
 
 const Excel = (props) => {
-    let excelDiv = React.createRef()
     return (
         <div className={classes.excel}
-             onMouseDown={(e) => {
-                 resizer(e, props)
-             }}
-             ref={excelDiv}
+             onMouseDown={(e) => resizer(e, props)}
+             onKeyDown={event => switchCell(event)}
         >
             <HeaderContainer/>
             <ToolbarContainer/>
@@ -43,6 +40,43 @@ const Excel = (props) => {
                 type === 'col' ?
                     props.setColState(resizer.dataset.col, parseInt(resizer.style.width || getComputedStyle(resizer).width) + delta) :
                     props.setRowState(resizer.dataset.row, parseInt(resizer.style.height || getComputedStyle(resizer).height) + delta)
+            }
+        }
+    }
+
+    function switchCell(event) {
+        let cell = event.target.dataset.cell
+        if (cell && !event.shiftKey) {
+            let [row, col] = cell.split(':').map(el => parseInt(el))
+            const code = event.code
+            switch (code) {
+                case 'ArrowRight':
+                case 'Tab':
+                    col++
+                    if (col < props.sizeCols && col >= 0) {
+                        props.setActiveCell([row + ':' + col])
+                    }
+                    break
+                case 'ArrowLeft':
+                    col--
+                    if (col < props.sizeCols && col >= 0) {
+                        props.setActiveCell([row + ':' + col])
+                    }
+                    break
+                case 'ArrowDown':
+                case 'Enter':
+                    row++
+                    if (row < props.sizeRows && row >= 1) {
+                        props.setActiveCell([row + ':' + col])
+                    }
+                    break
+                case 'ArrowUp':
+                    row--
+                    if (row < props.sizeRows && row >= 1) {
+                        props.setActiveCell([row + ':' + col])
+                    }
+                    break
+                default:
             }
         }
     }

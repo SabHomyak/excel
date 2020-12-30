@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 
 class RowContainer extends React.Component {
     shouldComponentUpdate(nextProps, nextState, nextContext) {
-        debugger
+        //fix compare with stringify
         return JSON.stringify(this.props) !== JSON.stringify(nextProps);
     }
 
@@ -19,6 +19,7 @@ class RowContainer extends React.Component {
 const mapStateToProps = (state) => {
     return {
         colState: state.colState,
+        sizeCols:state.sizeCols
     }
 }
 

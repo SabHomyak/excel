@@ -2,8 +2,8 @@ import React from "react";
 import RowContainer from "./Row/RowContainer";
 
 
-const Rows = ({size, dataState, ...props}) => <>
-    {generateRows(size, dataState, props)}
+const Rows = ({sizeRow, dataState, ...props}) => <>
+    {generateRows(sizeRow, dataState, props)}
 </>
 
 
