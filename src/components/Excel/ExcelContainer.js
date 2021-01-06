@@ -8,8 +8,8 @@ const ExcelContainer = (props) => {
 }
 const mapStateToProps = state => {
     return {
-        sizeRows: state.sizeRows,
-        sizeCols: state.sizeCols
+        sizeRows: state.table.sizeRows,
+        sizeCols: state.table.sizeCols
     }
 }
 export default connect(mapStateToProps, {setColState, setRowState, setActiveCell})(ExcelContainer)

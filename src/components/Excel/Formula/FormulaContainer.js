@@ -7,11 +7,13 @@ const FormulaContainer = (props) => {
     return <Formula {...props}/>
 }
 
-const mapStateToProps = state => ({
-    formula:state.formula,
-    activeCell:state.activeCell
-})
+const mapStateToProps = state => {
+    return {
+        text: state.table.currentText,
+        activeCell: state.table.activeCell
+    }
+}
 
-export default connect(mapStateToProps,{
+export default connect(mapStateToProps, {
     setDataState
 })(FormulaContainer)

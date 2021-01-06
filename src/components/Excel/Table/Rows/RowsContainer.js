@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 
 
 const RowsContainer = (props) => {
+    // console.log(JSON.stringify(props.dataState))
     const getDataState = (dataState, index) => {
         let rowDataState = {}
         for (let key in dataState) {
@@ -27,9 +28,9 @@ const RowsContainer = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        dataState: state.dataState,
-        rowState: state.rowState,
-        sizeRow: state.sizeRows
+        dataState: state.table.dataState,
+        rowState: state.table.rowState,
+        sizeRow: state.table.sizeRows
     }
 }
 export default connect(mapStateToProps)(RowsContainer)

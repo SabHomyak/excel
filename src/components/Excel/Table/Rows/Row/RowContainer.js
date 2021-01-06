@@ -6,11 +6,16 @@ import {connect} from "react-redux";
 class RowContainer extends React.Component {
     shouldComponentUpdate(nextProps, nextState, nextContext) {
         //fix compare with stringify
-        return JSON.stringify(this.props) !== JSON.stringify(nextProps);
+        // console.log('shouldComponentUpdate')
+        let thisprops = JSON.stringify(this.props.dataState)
+        let nextprops = JSON.stringify(nextProps.dataState)
+        // console.log(thisprops)
+        // console.log(nextprops)
+        // console.log(thisprops!==nextprops)
+        return thisprops !== nextprops;
     }
 
     render() {
-
         return <Row {...this.props}
         />
     }
@@ -18,8 +23,8 @@ class RowContainer extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        colState: state.colState,
-        sizeCols:state.sizeCols
+        colState: state.table.colState,
+        sizeCols: state.table.sizeCols
     }
 }
 

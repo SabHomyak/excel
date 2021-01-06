@@ -4,8 +4,13 @@ import classes from './header.module.scss'
 
 const Header = (props) => {
     return <div className={classes.header}
+
     >
-        <input className={classes.input} type="text" defaultValue={'Новая таблица'}/>
+        <input className={classes.input}
+               onInput={(event) =>{
+                   props.setTitle(event.currentTarget.value)
+               }}
+               type="text" defaultValue={props.title}/>
         <div>
             <div className={classes.button}>
                 <i className='material-icons'>delete</i>

@@ -6,9 +6,9 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import {createStore} from "redux";
 import tableReducer from "./components/redux/tableReducer";
 import {Provider} from "react-redux";
+import {store} from "./components/redux/store";
 
 function App() {
-    const store = createStore(tableReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
     return (
         <Provider store={store}>
             <BrowserRouter>

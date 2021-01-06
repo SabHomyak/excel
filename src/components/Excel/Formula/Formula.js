@@ -11,7 +11,7 @@ const Formula = (props) => {
                 contentEditable={true}
                 spellCheck={false}
                 suppressContentEditableWarning={true}
-                dangerouslySetInnerHTML={{__html:props.formula}}
+                dangerouslySetInnerHTML={{__html:props.text}}
                 onInput={event => {
                     props.setDataState(props.activeCell,event.currentTarget.innerHTML)
                 }}

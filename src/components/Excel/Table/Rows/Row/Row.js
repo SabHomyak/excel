@@ -32,6 +32,7 @@ const Row = props => {
     )
 }
 const generateCols = ({index, colState, dataState,sizeCols}) => {
+
     const positionAinChar = 'A'.charCodeAt()
     // const positionZinChar = 'Z'.charCodeAt()
     // const sizeAZ = positionZinChar - positionAinChar
@@ -57,7 +58,8 @@ const generateCols = ({index, colState, dataState,sizeCols}) => {
     } else {
         return cols.map((col, i) => {
                 const position = `${index}:${i}`
-                return <CellContainer
+            // console.log('row',JSON.stringify(dataState[`${index}:${i}`]))
+            return <CellContainer
                     key={i}
                     position={position}
                     index={index}

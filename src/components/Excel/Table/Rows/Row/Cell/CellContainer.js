@@ -4,8 +4,9 @@ import {connect} from "react-redux";
 import {
     setActiveCell,
     setDataState,
-    setFormula,
-    setGroupActiveCell,} from "../../../../../redux/tableReducer";
+    setCurrentText,
+    setGroupActiveCell, setStyleCell,
+} from "../../../../../redux/tableReducer";
 
 
 const CellContainer = (props) => {
@@ -15,12 +16,13 @@ const CellContainer = (props) => {
 
 const mapStateToProps = state => {
     return {
-        activeCell: state.activeCell
+        activeCell: state.table.activeCell
     }
 }
 export default connect(mapStateToProps, {
     setActiveCell,
     setDataState,
-    setFormula,
-    setGroupActiveCell
+    setCurrentText,
+    setGroupActiveCell,
+    setStyleCell
 })(CellContainer)
