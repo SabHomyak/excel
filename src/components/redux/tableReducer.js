@@ -7,6 +7,7 @@ const SET_ROWSTATE = 'SET_ROWSTATE'
 const SET_TITLE = 'SET_TITLE'
 const SET_TEXT_STYLE = 'SET_TEXT_STYLE'
 const SET_STYLE_CELL = 'SET_STYLE_CELL'
+const SET_INITIAL_STATE = 'SET_INITIAL_STATE'
 
 
 const reHydrateStore = () => {
@@ -14,67 +15,97 @@ const reHydrateStore = () => {
         return JSON.parse(localStorage.getItem('tableState')) // re-hydrate the store
     }
 }
-const initialStateFromSessionStorage = reHydrateStore()
+let initialStateFromSessionStorage = reHydrateStore()
 
 const initialState = {
     title: 'Новая таблица',
-    sizeRows: 3,
+    sizeRows: 5,
     sizeCols: 5,
     colState: {},
     rowState: {},
-    dataState: {
-        '1:0': {
-            text: 'etto',
-            style: {
-                textAlign: 'right',
-                fontWeight: 'bold'
-            }
-        }
-    },
+    dataState: {},
     currentText: '',
-    activeCell: ['1:0'],
-    prevCell: '',
+    activeCell: '1:0',
+    prevCell: '1:0',
     currentStyleCell: {},
     ...initialStateFromSessionStorage
 }
 const tableReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_ACTIVE_CELL:
+            let prevCell = typeof state.activeCell === "string" ? state.activeCell : action.cell
             return {
                 ...state,
                 activeCell: action.cell,
-                prevCell: ''
+                prevCell
             }
         case SET_GROUP_ACTIVE_CELL:
-            let prevCell = state.prevCell === '' ? action.prevCell : state.prevCell
-
-            let activeCells = generateActiveCells(prevCell, action.currentCell)
-            return {...state, activeCell: activeCells, prevCell, formula: ''}
+            let prev = state.prevCell
+            if (typeof state.activeCell === 'string') {
+                prev = state.activeCell
+            }
+            let activeCells = generateActiveCells(prev, action.currentCell)
+            return {...state, activeCell: activeCells, currentText: '', prevCell: prev}
         case SET_DATASTATE:
             let dataState = {...state.dataState}
-            dataState[action.cell] = {...dataState[action.cell], text: action.value}
+            let newObj = {...dataState[action.cell]}
+            newObj.text = action.value
+            if (newObj.style === undefined) {
+                newObj.style = {}
+            }
+            dataState[action.cell] = newObj
             return {
                 ...state, dataState
             }
         case SET_CURRENT_TEXT:
             return {...state, currentText: action.text}
         case SET_TEXT_STYLE:
-            let oldObj = state.dataState[state.activeCell]
-            let newObj = {...oldObj}
-            newObj.style = {...oldObj.style, ...action.style}
-            const updatedData = {...state.dataState, [state.activeCell]: newObj}
+            let updatedData = {...state.dataState}
+            if (typeof state.activeCell === 'object') {
+                let cells = state.activeCell
+                for (let row in cells) {
+                    let cols = cells[row]
+                    cols.forEach(col => {
+                        let cell = `${row}:${col}`
+                        let oldObj = state.dataState[cell]
+                        let newObj = oldObj ?
+                            {...oldObj} :
+                            {
+                                text: '',
+                                style: {}
+                            }
+
+                        newObj.style = {...newObj.style, ...action.style}
+                        updatedData[cell] = newObj
+                    })
+                }
+            } else {
+                let oldObj = state.dataState[state.activeCell]
+                let newObj = oldObj ?
+                    {...oldObj} :
+                    {
+                        text: '',
+                        style: {}
+                    }
+                // debugger
+                newObj.style = {...newObj.style, ...action.style}
+                updatedData  [state.activeCell] = newObj
+            }
             return {...state, dataState: updatedData}
         case SET_STYLE_CELL:
-            return {...state,currentStyleCell: action.style}
+            return {...state, currentStyleCell: action.style}
         case SET_TITLE:
             return {...state, title: action.title}
         case SET_COLSTATE:
             return {...state, colState: {...state.colState, [action.col]: action.width}}
         case SET_ROWSTATE:
             return {...state, rowState: {...state.rowState, [action.row]: action.height}}
+        case SET_INITIAL_STATE:
+            return initialState
         default:
             return state
     }
+
 }
 export default tableReducer
 
@@ -87,10 +118,16 @@ export const setCurrentText = (text) => ({type: SET_CURRENT_TEXT, text})
 export const setTextStyle = (style) => ({type: SET_TEXT_STYLE, style})
 export const setStyleCell = (style) => ({type: SET_STYLE_CELL, style})
 export const setTitle = (title) => ({type: SET_TITLE, title})
+export const setInitialState = () => ({type: SET_INITIAL_STATE})
+export const testDispatch = () => (dispatch) => (
+    setTimeout(()=>{
+        dispatch(setCurrentText('test'))
+    },3000)
+)
 
 
 export const ACTIONS = [
-    SET_COLSTATE, SET_ROWSTATE, SET_DATASTATE, SET_TITLE,SET_STYLE_CELL
+    SET_COLSTATE, SET_ROWSTATE, SET_DATASTATE, SET_TITLE, SET_STYLE_CELL
 ]
 
 const generateActiveCells = (prevCell, currentCell) => {
@@ -106,10 +143,12 @@ const generateActiveCells = (prevCell, currentCell) => {
         prevCol = currCol
         currCol = data
     }
-    let activeCells = []
+    let activeCells = {}
     for (let row = prevRow; row <= currRow; row++) {
+        activeCells[row] = []
         for (let col = prevCol; col <= currCol; col++) {
-            activeCells.push(`${row}:${col}`)
+            // activeCells.push(`${row}:${col}`)
+            activeCells[row].push(col)
         }
     }
     return activeCells

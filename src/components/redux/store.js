@@ -1,9 +1,12 @@
 import {applyMiddleware, combineReducers, compose, createStore} from "redux";
 import tableReducer, {ACTIONS} from "./tableReducer";
+import modalReducer, {SET_TASK} from "./modalReducer";
+import ReduxThunk from 'redux-thunk'
 
 
 const rootReducer = combineReducers({
-    table: tableReducer
+    table: tableReducer,
+    modal:modalReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -25,4 +28,4 @@ const localStorageMiddleware = ({getState}) => {
 };
 
 
-export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(localStorageMiddleware)))
+export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(localStorageMiddleware,ReduxThunk)))

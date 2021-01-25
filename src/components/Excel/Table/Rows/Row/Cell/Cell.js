@@ -1,9 +1,9 @@
-import React, {useCallback, useEffect, useMemo, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import classes from './cell.module.scss'
 
 
 const Cell = (props) => {
-
+    const [isEditable, setIsEditable] = useState(false)
     const currentCell = props.position
     let prevCell = null
     let div = useRef()
@@ -13,29 +13,37 @@ const Cell = (props) => {
     useEffect(() => {
         if (props.isActive) {
             props.setCurrentText(text)
-            div.current.focus()
             props.setStyleCell(style)
         }
     }, [props.isActive, style])
+    if (isEditable) {
+        //without setTimeout Element.focus doesnt work...
+        setTimeout(() => {
+            div.current.focus()
+        })
+    }
     return (
         <div className={classes.rowData}>
             <div
                 ref={div}
                 className={classes.cell + ' ' + activeClass}
-                contentEditable={true}
-                suppressContentEditableWarning={true}
+                contentEditable={isEditable}
+                suppressContentEditableWarning={isEditable}
                 style={{width: props.width, ...style}}
                 data-cell={currentCell}
                 onClick={event => {
                     if (event.shiftKey) {
                         props.setGroupActiveCell(currentCell, prevCell)
                     } else {
-                        if (!props.isActive) {
-                            props.setActiveCell([currentCell])
-                        }
+                        props.setActiveCell(currentCell)
                     }
                 }}
+                onDoubleClick={(event) => {
+                    setIsEditable(true)
+                }}
                 onFocus={(event) => {
+                    // ni rabotaet:))
+                    // console.log(event.relatedTarget)
                     prevCell = event.relatedTarget ? event.relatedTarget.dataset.cell : '1:0'
                 }}
                 onBlur={(event) => {
@@ -43,17 +51,34 @@ const Cell = (props) => {
                     if (text !== currText && currText !== '') {
                         props.setDataState(currentCell, event.target.innerHTML)
                     }
+                    setIsEditable(false)
                 }}
                 onKeyDown={(event) => {
-                    if (event.code === 'Enter' && !event.shiftKey) {
+                    console.log('asdfasdf')
+                    let isNextLine = event.code === 'Enter' && !event.shiftKey
+                    if (isNextLine) {
                         event.preventDefault()
+                    }
+                    if (event.code === 'Escape' || isNextLine) {
+                        event.target.blur()
                     }
                 }}
                 onInput={(event) => props.setCurrentText(event.target.innerHTML)}
-                dangerouslySetInnerHTML={{__html: text}}
+                dangerouslySetInnerHTML={{__html: parse(text)}}
             />
         </div>
     )
+}
+
+const parse = (text) => {
+    if (text.startsWith('=')) {
+        try {
+            return eval(text.slice(1))
+        } catch (e) {
+            return text
+        }
+    }
+    return text
 }
 
 export default React.memo(Cell)

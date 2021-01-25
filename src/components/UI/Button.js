@@ -1,14 +1,11 @@
-import classes from "../Toolbar/toolbar.module.scss";
+import classes from "../Excel/Toolbar/toolbar.module.scss";
 import React from "react";
 import {connect} from "react-redux";
-import {setTextStyle} from "../../redux/tableReducer";
+import {setTextStyle} from "../redux/tableReducer";
 
 const Button = props => {
     const activeClass = props.isActive ? 'active' : ''
-    const [property,value] = props.style.split(":")
-    let style={
-        [property]:value
-    }
+    let style = {...props.style}
     return (
         <div className={classes.button + ' ' + classes[activeClass]}
              onClick={(event) => {
@@ -17,6 +14,9 @@ const Button = props => {
                  } else {
                      for (let key in style) {
                          style[key] = ''
+                         if(key === 'textAlign'){
+                             style[key] = 'left'
+                         }
                      }
                      props.setTextStyle(style)
                  }

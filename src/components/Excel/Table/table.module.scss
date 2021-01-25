@@ -1,4 +1,5 @@
 @import "../../../variables";
+$tableHeight: $header-height + $toolbar-height + $formula-height;
 
 .table {
   position: absolute;
@@ -7,4 +8,5 @@
   top: $header-height + $toolbar-height + $formula-height;
   overflow-x: auto;
   padding-bottom: 2px;
+  height: calc(100vh - #{$tableHeight});
 }

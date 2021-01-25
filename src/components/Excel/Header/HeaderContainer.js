@@ -1,7 +1,8 @@
 import Header from "./Header";
 import React from "react";
 import {connect} from "react-redux";
-import {setTitle} from "../../redux/tableReducer";
+import {setInitialState, setTitle, testDispatch} from "../../redux/tableReducer";
+import {openModal} from "../../redux/modalReducer";
 
 
 const HeaderContainer = (props) => {
@@ -16,5 +17,8 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, {
-    setTitle
+    setTitle,
+    setInitialState,
+    openModal,
+    testDispatch
 })(HeaderContainer)

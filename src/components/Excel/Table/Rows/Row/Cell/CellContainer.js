@@ -10,8 +10,8 @@ import {
 
 
 const CellContainer = (props) => {
-    const active = !!props.activeCell.includes(props.position)
-    return <Cell {...props} activeCell={null} isActive={active}/>
+    // const active = !!props.activeCell.includes(props.position)
+    return <Cell {...props} activeCell={null} isActive={props.activeCell}/>
 }
 
 const mapStateToProps = state => {
@@ -19,10 +19,10 @@ const mapStateToProps = state => {
         activeCell: state.table.activeCell
     }
 }
-export default connect(mapStateToProps, {
+export default connect(null, {
     setActiveCell,
     setDataState,
     setCurrentText,
     setGroupActiveCell,
     setStyleCell
-})(CellContainer)
+})(React.memo(CellContainer))

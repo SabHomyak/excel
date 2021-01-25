@@ -31,7 +31,7 @@ const Row = props => {
         </div>
     )
 }
-const generateCols = ({index, colState, dataState,sizeCols}) => {
+const generateCols = ({index, colState, dataState, sizeCols, activeCell}) => {
 
     const positionAinChar = 'A'.charCodeAt()
     // const positionZinChar = 'Z'.charCodeAt()
@@ -56,18 +56,33 @@ const generateCols = ({index, colState, dataState,sizeCols}) => {
             }
         )
     } else {
+        let active = isActive(activeCell)
         return cols.map((col, i) => {
                 const position = `${index}:${i}`
-            // console.log('row',JSON.stringify(dataState[`${index}:${i}`]))
-            return <CellContainer
+                let a = activeCell
+                let isActiveCell = active(i)
+                return <CellContainer
                     key={i}
                     position={position}
                     index={index}
                     width={colState[i] ? colState[i] : null}
                     data={dataState[`${index}:${i}`]}
+                    activeCell={isActiveCell}
                 />
             }
         )
     }
+}
+const isActive = (cols) => {
+    if (cols) {
+        return (col) => {
+            if (typeof cols === 'string') {
+                return col === parseInt(cols.split(':')[1])
+            } else {
+                return cols.includes(col)
+            }
+        }
+    }
+    return () => null
 }
 export default React.memo(Row)

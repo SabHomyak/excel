@@ -5,12 +5,11 @@ import {connect} from "react-redux";
 
 class RowContainer extends React.Component {
     shouldComponentUpdate(nextProps, nextState, nextContext) {
+
         //fix compare with stringify
         // console.log('shouldComponentUpdate')
-        let thisprops = JSON.stringify(this.props.dataState)
-        let nextprops = JSON.stringify(nextProps.dataState)
-        // console.log(thisprops)
-        // console.log(nextprops)
+        let thisprops = JSON.stringify(this.props)
+        let nextprops = JSON.stringify(nextProps)
         // console.log(thisprops!==nextprops)
         return thisprops !== nextprops;
     }
