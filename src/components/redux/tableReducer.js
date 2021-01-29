@@ -1,3 +1,5 @@
+import excelFileApi from "../../Api/ExcelFileApi/excelFileApi";
+
 const SET_ACTIVE_CELL = 'SET_ACTIVE_CELL'
 const SET_GROUP_ACTIVE_CELL = 'SET_GROUP_ACTIVE_CELL'
 const SET_DATASTATE = 'SET_DATASTATE'
@@ -15,9 +17,9 @@ const reHydrateStore = () => {
         return JSON.parse(localStorage.getItem('tableState')) // re-hydrate the store
     }
 }
-let initialStateFromSessionStorage = reHydrateStore()
 
 const initialState = {
+    id: 0,
     title: 'Новая таблица',
     sizeRows: 5,
     sizeCols: 5,
@@ -27,10 +29,12 @@ const initialState = {
     currentText: '',
     activeCell: '1:0',
     prevCell: '1:0',
-    currentStyleCell: {},
-    ...initialStateFromSessionStorage
+    currentStyleCell: {}
 }
-const tableReducer = (state = initialState, action) => {
+const tableReducer = (state = {
+    ...initialState,
+    ...reHydrateStore()
+}, action) => {
     switch (action.type) {
         case SET_ACTIVE_CELL:
             let prevCell = typeof state.activeCell === "string" ? state.activeCell : action.cell
@@ -87,7 +91,6 @@ const tableReducer = (state = initialState, action) => {
                         text: '',
                         style: {}
                     }
-                // debugger
                 newObj.style = {...newObj.style, ...action.style}
                 updatedData  [state.activeCell] = newObj
             }
@@ -101,7 +104,7 @@ const tableReducer = (state = initialState, action) => {
         case SET_ROWSTATE:
             return {...state, rowState: {...state.rowState, [action.row]: action.height}}
         case SET_INITIAL_STATE:
-            return initialState
+            return {...initialState, ...action.state}
         default:
             return state
     }
@@ -118,12 +121,25 @@ export const setCurrentText = (text) => ({type: SET_CURRENT_TEXT, text})
 export const setTextStyle = (style) => ({type: SET_TEXT_STYLE, style})
 export const setStyleCell = (style) => ({type: SET_STYLE_CELL, style})
 export const setTitle = (title) => ({type: SET_TITLE, title})
-export const setInitialState = () => ({type: SET_INITIAL_STATE})
-export const testDispatch = () => (dispatch) => (
-    setTimeout(()=>{
-        dispatch(setCurrentText('test'))
-    },3000)
-)
+export const setInitialState = (state) => ({type: SET_INITIAL_STATE, state})
+export const updateExcel = () => async (dispatch, getState) => {
+    const state = getState().table
+    const file = {
+        excelFileName: state.title,
+        jsonData: `${JSON.stringify({
+            colState: state.colState,
+            dataState: state.dataState,
+            rowState: state.rowState
+        })}`,
+        openedDate: new Date().getTime()
+    }
+    await excelFileApi.updateFile(state.id,file)
+}
+export const deleteExcel = (id) => async (dispatch) => {
+    await excelFileApi.deleteFile(id)
+    localStorage.removeItem('tableState')
+    dispatch(setInitialState({}))
+}
 
 
 export const ACTIONS = [

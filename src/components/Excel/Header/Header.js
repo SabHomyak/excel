@@ -11,12 +11,11 @@ const Header = (props) => {
                type="text" defaultValue={props.title}/>
         <div>
             <div className={classes.button}
-                 onClick={()=>{
-                     //можно отказатья от @type@ ведь он не нужон
+                 onClick={() => {
                      props.openModal({
-                         text:'А не сохранить ли нам файл?',
-                         callback:()=>{
-                             props.testDispatch()
+                         text: 'А не сохранить ли нам файл?',
+                         callback: () => {
+                             props.updateExcel()
                          }
                      })
                  }}
@@ -24,23 +23,21 @@ const Header = (props) => {
                 <i className='material-icons'>save_alt</i>
             </div>
             <div className={classes.button}
-                 onClick={()=>{
+                 onClick={() => {
                      props.openModal({
-                         text:'А не удалить ли нам файл?',
-                         redirect:'dashboard',
-                         callback:()=>{
-                             localStorage.removeItem('tableState')
-                             props.setInitialState()
+                         text: 'А не удалить ли нам файл?',
+                         redirect: 'dashboard',
+                         callback: async() => {
+                             await props.deleteExcel(props.idFile)
                          }
                      })
                  }}>
                 <i className='material-icons'>delete</i>
             </div>
             <div className={classes.button}
-                 onClick={()=>{
+                 onClick={() => {
                      props.openModal({
-                         text:'А не сохранить ли нам файл?',
-                         type:'saveee'
+                         text: 'А не сохранить ли нам файл?',
                      })
                  }}>
                 <i className='material-icons'>exit_to_app</i>

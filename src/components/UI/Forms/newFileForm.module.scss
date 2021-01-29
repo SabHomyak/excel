@@ -1,0 +1,17 @@
+.field{
+  margin: 10px 0;
+}
+
+.input{
+  padding: 5px;
+}
+
+.buttons{
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+.button{
+  align-self: center;
+  padding:5px 15px;
+}

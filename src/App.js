@@ -6,6 +6,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import {Provider} from "react-redux";
 import {store} from "./components/redux/store";
 import Modal from "./components/UI/Modal/Modal";
+import DashboardContainer from "./components/Dashboard/DashboardContainer";
 
 function App() {
     return (
@@ -13,7 +14,7 @@ function App() {
             <BrowserRouter>
                 <Switch>
                     <Route path={'/'} exact={true}><Excel/></Route>
-                    <Route path={'/dashboard'}><Dashboard/></Route>
+                    <Route path={'/dashboard'}><DashboardContainer/></Route>
                 </Switch>
                 <Modal/>
             </BrowserRouter>

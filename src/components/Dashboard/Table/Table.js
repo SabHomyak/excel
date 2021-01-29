@@ -1,8 +1,27 @@
 import React from "react";
 import classes from './table.module.scss'
-
+import excelFileApi from "../../../Api/ExcelFileApi/excelFileApi";
+import { useHistory } from "react-router-dom";
 
 const Table = (props) => {
+    let history = useHistory()
+    const printFiles = props.files.map(file => {
+        return (
+            <li className={classes.record} key={file.id}>
+                <a href="/#"
+                   onClick={(e) => {
+                       e.preventDefault()
+                        excelFileApi.getFile(file.id)
+                            .then(file =>{
+                                props.setInitialState({...file})
+                                localStorage.removeItem('tableState')
+                                history.push('/')
+                            })
+                   }}>{file.excelFileName}</a>
+                <strong>{new Date(file.openedDate).toLocaleDateString()}</strong>
+            </li>
+        )
+    })
     return (
         <div className={classes.table + ' ' + classes.view}>
             <div className={classes.listHeader}>
@@ -10,18 +29,7 @@ const Table = (props) => {
                 <span>Дата открытия</span>
             </div>
             <ul className={classes.list}>
-                <li className={classes.record}>
-                    <a href="/#">Таблица номер 1</a>
-                    <strong>12.06.2020</strong>
-                </li>
-                <li className={classes.record}>
-                    <a href="/#">Таблица номер 1</a>
-                    <strong>12.06.2022</strong>
-                </li>
-                <li className={classes.record}>
-                    <a href="/#">Таблица номер 1</a>
-                    <strong>12.06.2021</strong>
-                </li>
+                {printFiles}
             </ul>
         </div>
     )

@@ -1,8 +1,26 @@
 import Table from "./Table";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import excelFileApi from "../../../Api/ExcelFileApi/excelFileApi";
+import {connect} from "react-redux";
+import {setInitialState} from "../../redux/tableReducer";
+import {setListFiles} from "../../redux/dashboardReducer";
 
 
-const TableContainer = (props) =>{
-    return <Table/>
+const TableContainer = (props) => {
+    let files = props.files
+    useEffect(async () => {
+        console.log('useEffect')
+        files = await excelFileApi.getAllFiles()
+        props.setListFiles(files)
+    }, [])
+    return <Table {...props} files={files}/>
 }
-export default TableContainer
+const mapStateToProps = state => {
+    return {
+        files: state.dashboard.listFiles
+    }
+}
+export default connect(mapStateToProps, {
+    setInitialState,
+    setListFiles
+})(TableContainer)

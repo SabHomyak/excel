@@ -54,7 +54,6 @@ const Cell = (props) => {
                     setIsEditable(false)
                 }}
                 onKeyDown={(event) => {
-                    console.log('asdfasdf')
                     let isNextLine = event.code === 'Enter' && !event.shiftKey
                     if (isNextLine) {
                         event.preventDefault()
