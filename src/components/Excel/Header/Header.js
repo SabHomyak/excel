@@ -1,8 +1,9 @@
 import React from "react";
 import classes from './header.module.scss'
-
+import { useHistory} from "react-router-dom";
 
 const Header = (props) => {
+    let history = useHistory()
     return <div className={classes.header}>
         <input className={classes.input}
                onInput={(event) => {
@@ -27,7 +28,7 @@ const Header = (props) => {
                      props.openModal({
                          text: 'А не удалить ли нам файл?',
                          redirect: 'dashboard',
-                         callback: async() => {
+                         callback: async () => {
                              await props.deleteExcel(props.idFile)
                          }
                      })
@@ -37,7 +38,16 @@ const Header = (props) => {
             <div className={classes.button}
                  onClick={() => {
                      props.openModal({
-                         text: 'А не сохранить ли нам файл?',
+                         text: 'Вы действительно хотите выйти?',
+                         // redirect: 'dashboard',
+                         // callback open modal ... maybe?
+                         callback: ()=>{
+                             if(props.callback){
+                                 props.callback()
+                             } else {
+                                 history.push('dashboard')
+                             }
+                         }
                      })
                  }}>
                 <i className='material-icons'>exit_to_app</i>

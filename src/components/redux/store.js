@@ -3,12 +3,14 @@ import tableReducer, {ACTIONS} from "./tableReducer";
 import modalReducer from "./modalReducer";
 import ReduxThunk from 'redux-thunk'
 import dashboardReducer from "./dashboardReducer";
+import userReducer from "./userReducer";
 
 
 const rootReducer = combineReducers({
     table: tableReducer,
-    modal:modalReducer,
-    dashboard:dashboardReducer
+    modal: modalReducer,
+    dashboard: dashboardReducer,
+    user:userReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -18,10 +20,11 @@ const localStorageMiddleware = ({getState}) => {
         const result = next(action);
         if (ACTIONS.includes(result.type)) {
             const tableState = {
+                id: getState().table.id,
                 rowState: getState().table.rowState,
                 colState: getState().table.colState,
                 dataState: getState().table.dataState,
-                title:getState().table.title,
+                title: getState().table.title,
             }
             localStorage.setItem('tableState', JSON.stringify(tableState))
         }
@@ -30,4 +33,4 @@ const localStorageMiddleware = ({getState}) => {
 };
 
 
-export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(localStorageMiddleware,ReduxThunk)))
+export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(localStorageMiddleware, ReduxThunk)))

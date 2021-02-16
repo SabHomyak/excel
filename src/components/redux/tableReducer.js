@@ -10,6 +10,7 @@ const SET_TITLE = 'SET_TITLE'
 const SET_TEXT_STYLE = 'SET_TEXT_STYLE'
 const SET_STYLE_CELL = 'SET_STYLE_CELL'
 const SET_INITIAL_STATE = 'SET_INITIAL_STATE'
+const SET_CHANGED = 'SET_CHANGED'
 
 
 const reHydrateStore = () => {
@@ -19,7 +20,8 @@ const reHydrateStore = () => {
 }
 
 const initialState = {
-    id: 0,
+    id: -1,
+    changed: false,
     title: 'Новая таблица',
     sizeRows: 5,
     sizeCols: 5,
@@ -59,7 +61,7 @@ const tableReducer = (state = {
             }
             dataState[action.cell] = newObj
             return {
-                ...state, dataState
+                ...state, dataState,changed: true
             }
         case SET_CURRENT_TEXT:
             return {...state, currentText: action.text}
@@ -94,15 +96,15 @@ const tableReducer = (state = {
                 newObj.style = {...newObj.style, ...action.style}
                 updatedData  [state.activeCell] = newObj
             }
-            return {...state, dataState: updatedData}
+            return {...state, dataState: updatedData,changed: true}
         case SET_STYLE_CELL:
             return {...state, currentStyleCell: action.style}
         case SET_TITLE:
-            return {...state, title: action.title}
+            return {...state, title: action.title,changed: true}
         case SET_COLSTATE:
-            return {...state, colState: {...state.colState, [action.col]: action.width}}
+            return {...state, colState: {...state.colState, [action.col]: action.width},changed: true}
         case SET_ROWSTATE:
-            return {...state, rowState: {...state.rowState, [action.row]: action.height}}
+            return {...state, rowState: {...state.rowState, [action.row]: action.height},changed: true}
         case SET_INITIAL_STATE:
             return {...initialState, ...action.state}
         default:
@@ -112,6 +114,7 @@ const tableReducer = (state = {
 }
 export default tableReducer
 
+export const setChanged = (changed) => ({type: SET_CHANGED, changed})
 export const setActiveCell = (cell) => ({type: SET_ACTIVE_CELL, cell})
 export const setGroupActiveCell = (currentCell, prevCell) => ({type: SET_GROUP_ACTIVE_CELL, currentCell, prevCell})
 export const setColState = (col, width) => ({type: SET_COLSTATE, col, width})

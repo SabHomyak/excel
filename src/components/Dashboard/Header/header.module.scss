@@ -13,4 +13,13 @@
   background: #fff;
   box-shadow: 0 2px 5px 2px rgba(60, 64, 67, 0.15);
   z-index: 1000;
+
+  h1{
+    margin: auto;
+  }
+  .profile{
+    position: relative;
+    right: 30px;
+    font-size: 15px;
+  }
 }

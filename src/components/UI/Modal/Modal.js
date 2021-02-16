@@ -6,7 +6,6 @@ import {setShow} from "../../redux/modalReducer";
 
 
 const Modal = ({show, setShow, config, Form}) => {
-
     let history = useHistory()
     let modalDiv = useRef(null)
     const close = () => {
@@ -27,7 +26,6 @@ const Modal = ({show, setShow, config, Form}) => {
         }
 
     }
-
     return (
         <>
 

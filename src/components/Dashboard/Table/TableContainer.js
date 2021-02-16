@@ -9,7 +9,6 @@ import {setListFiles} from "../../redux/dashboardReducer";
 const TableContainer = (props) => {
     let files = props.files
     useEffect(async () => {
-        console.log('useEffect')
         files = await excelFileApi.getAllFiles()
         props.setListFiles(files)
     }, [])
